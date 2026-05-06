@@ -1,5 +1,6 @@
 import sys
 
+builtins = ["exit", "echo", "type"]
 
 def main():
 
@@ -16,7 +17,17 @@ def main():
             print(" ".join(args[1:]))
             continue
 
-        print(f"{command}: command not found")
+        if command == "type":
+            command_type = args[1]
 
+            if command_type in builtins:
+                print(f"{command_type} is a shell builtin")
+            else:
+                print(f"{command_type}: not found")
+
+            continue
+
+        print(f"{command}: command not found")
+        
 if __name__ == "__main__":
     main()
