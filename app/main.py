@@ -47,6 +47,9 @@ def main():
             if command == "cd":
                 path = args[1]
 
+                if path == "~":
+                    path = os.getenv('HOME')
+                    
                 if not os.path.exists(path):
                     print(f"cd: {path}: No such file or directory")
                     continue
