@@ -2,7 +2,7 @@ import sys
 import os
 import subprocess
 
-builtins = ["exit", "echo", "type"]
+builtins = ["exit", "echo", "type", "pwd"]
 
 def main():
 
@@ -38,6 +38,10 @@ def main():
                 
                 if not found:
                     print(f"{command_type}: not found")
+                continue
+
+            if command == "pwd":
+                print(os.getcwd())
                 continue
         else:
             found = False
