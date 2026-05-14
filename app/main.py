@@ -2,7 +2,7 @@ import sys
 import os
 import subprocess
 
-builtins = ["exit", "echo", "type", "pwd"]
+builtins = ["exit", "echo", "type", "pwd", "cd"]
 
 def main():
 
@@ -42,6 +42,16 @@ def main():
 
             if command == "pwd":
                 print(os.getcwd())
+                continue
+
+            if command == "cd":
+                path = args[1]
+
+                if not os.path.exists(path):
+                    print(f"cd: {path}: No such file or directory")
+                    continue
+
+                os.chdir(path)
                 continue
         else:
             found = False
