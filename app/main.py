@@ -1,5 +1,6 @@
 import sys
 import os
+import subprocess
 
 builtins = ["exit", "echo", "type"]
 
@@ -11,32 +12,44 @@ def main():
         args = input().split()
         command = args[0]
 
-        if command == "exit":
-            break
-        
-        if command == "echo":
-            print(" ".join(args[1:]))
-            continue
-
-        if command == "type":
-            command_type = args[1]
-
-            if command_type in builtins:
-                print(f"{command_type} is a shell builtin")
+        if command in builtins:
+            if command == "exit":
+                break
+            
+            if command == "echo":
+                print(" ".join(args[1:]))
                 continue
 
+            if command == "type":
+                command_type = args[1]
+
+                if command_type in builtins:
+                    print(f"{command_type} is a shell builtin")
+                    continue
+
+                found = False
+                paths = os.environ.get('PATH', '').split(os.pathsep)
+                for path in paths:
+                    full_path = os.path.join(path, command_type)
+                    if os.path.isfile(full_path) and os.access(full_path, os.X_OK):
+                        print(f"{command_type} is {full_path}")
+                        found = True
+                        break
+                
+                if not found:
+                    print(f"{command_type}: not found")
+                continue
+        else:
             found = False
             paths = os.environ.get('PATH', '').split(os.pathsep)
             for path in paths:
-                full_path = os.path.join(path, command_type)
+                full_path = os.path.join(path, command)
                 if os.path.isfile(full_path) and os.access(full_path, os.X_OK):
-                    print(f"{command_type} is {full_path}")
+                    subprocess.run(args)
                     found = True
                     break
-            
-            if not found:
-                print(f"{command_type}: not found")
-            continue
+            if found:
+                continue
 
         print(f"{command}: command not found")
 
