@@ -1,6 +1,7 @@
 import sys
 import os
 import subprocess
+import shlex
 
 builtins = ["exit", "echo", "type", "pwd", "cd"]
 
@@ -9,7 +10,7 @@ def main():
     while True:
         sys.stdout.write("$ ")
 
-        args = input().split()
+        args = shlex.split(input())
         command = args[0]
 
         if command in builtins:
